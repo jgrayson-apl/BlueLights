@@ -322,7 +322,7 @@
     <div class="js-modal modal-overlay" data-modal="configure-template-dialog">
       <div class="modal-content column-15" role="dialog" aria-labelledby="modal" role="dialog">
         <span class="js-modal-toggle icon-ui-close esri-interactive right" aria-label="close-modal"></span>
-        <h3 class="trailer-half icon-ui-blue icon-ui-question">Configure as Template in Organization App Gallery</h3>
+        <h3 class="trailer-half icon-ui-blue icon-ui-question">Organization App Gallery Template Configuration</h3>
         <div class="panel leader-half">
           <div class="panel panel-no-border">
             You can also use this application as a configurable template in your organization.
@@ -332,8 +332,28 @@
             <li>
               <div class="font-size-1 avenir-demi">Host this application from your own web server</div>
               <div>
-                Download the source code for this application from GitHub and host it on your own web server.
-                Make sure the application is running correctly before continuing.
+                Download the source code for this application
+                <a class="avenir-demi" href="https://github.com/jgrayson-apl/BlueLights" target="_blank">from GitHub</a>
+                and host it on your own web server.
+              </div>
+              <div>
+                Configure the following parameters in the
+                <span class="avenir-demi">./config/config.json</span>
+                file:
+                <ul class="trailer-0 font-size--3">
+                  <li>
+                    <span class="avenir-demi">proxyUrl</span>
+                    - setup and configure a proxy on your server then set the url here.
+                  </li>
+                  <li>
+                    <span class="avenir-demi">portalUrl</span>
+                    - optional - change to your organization's url if desired.
+                  </li>
+                  <li>
+                    <span class="avenir-demi">oauthappid</span>
+                    - use app id after this app is configured as an item in your org. (see step #4 below)
+                  </li>
+                </ul>
               </div>
             </li>
 
@@ -639,7 +659,7 @@
                   <span class="dropdown-title">Details</span>
                   <span id="analysis-about" class="dropdown-link icon-ui-question js-modal-toggle" data-modal="analysis-about-dialog" title="Learn about the analysis process..." role="menu-item">About Blue Light Visibility Analysis</span>
                   <span class="dropdown-link icon-ui-question js-modal-toggle" data-modal="use-webmap-dialog" title="Learn how to use your Web Map in this application" role="menu-item">Using your Web Map</span>
-                  <span class="dropdown-link icon-ui-question js-modal-toggle" data-modal="configure-template-dialog" title="Learn how to configure this application as a template in your organization's app gallery" role="menu-item">Configure as Template in Organization App Gallery</span>
+                  <span class="dropdown-link icon-ui-question js-modal-toggle" data-modal="configure-template-dialog" title="Learn how to configure this application as a template in your organization's app gallery" role="menu-item">Organization App Gallery Template Configuration</span>
 
                   <span class="dropdown-title">Community</span>
                   <a class="dropdown-link icon-ui-link-external" title="Visit the 'Campus Blue Lights' community on GeoNet" href="https://community.esri.com/groups/campus-blue-lights-app-beta" target="_blank" role="menu-item">Visit our GeoNet site</a>
