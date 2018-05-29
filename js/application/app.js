@@ -510,7 +510,7 @@ define([
         analysisView.map.addMany([obstructionsLayer, visibilityLayer, locationsLayer]);
 
         // BLUE LIGHTS GRADIENT //
-        const blueLightGradient = [
+        const blueLightGradient = this.config.blueLightGradient || [
           { "offset": "0%", "stop-color": "white", "stop-opacity": "1.00" },
           { "offset": "15%", "stop-color": "cyan", "stop-opacity": "0.85" },
           { "offset": "100%", "stop-color": "rgb(64,0,255)", "stop-opacity": "0.00" }
