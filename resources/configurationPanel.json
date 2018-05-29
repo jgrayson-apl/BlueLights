@@ -1,0 +1,22 @@
+{
+  "configurationSettings": [
+    {
+      "category": "<b>Blue Lights Map</b>",
+      "fields": [
+        {
+          "type": "webmap"
+        },
+        {
+          "type": "string",
+          "fieldName": "title",
+          "label": "Application Title",
+          "tooltip": "Application Title",
+          "placeHolder": "the application title"
+        }
+      ]
+    }
+  ],
+  "values": {    
+    "title": ""
+  }
+}

@@ -1,0 +1,773 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="stylesheet" href="//s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.8/css/calcite-web.min.css">
+    <link rel="stylesheet" href="//js.arcgis.com/4.6/esri/css/main.css">
+    <link rel="stylesheet" href="./css/slider.css">
+    <link rel="stylesheet" href="./css/boilerplate.css">
+    <script type="text/javascript" src="./js/dojoConfig.js"></script>
+    <script type="text/javascript" src="//js.arcgis.com/4.6/"></script>
+    <script type="text/javascript">
+      require([
+        "boilerplate",
+        "dojo/text!config/config.json",
+        "dojo/text!boilerplate/settings.json",
+        "application"
+      ], function (Boilerplate, configSettings, boilerplateSettings, app) {
+
+        new Boilerplate(JSON.parse(configSettings), JSON.parse(boilerplateSettings)).then(function (boilerplateResponse) {
+          const exampleApp = new app();
+          exampleApp.init(boilerplateResponse);
+        });
+
+      });
+    </script>
+  </head>
+  <body>
+
+    <!-- DETAILS DIALOG -->
+    <div class="js-modal modal-overlay" data-modal="app-details-dialog">
+      <div class="modal-content column-12" role="dialog" aria-labelledby="modal" role="dialog">
+        <span class="js-modal-toggle right icon-ui-close esri-interactive" aria-label="close-modal"></span>
+        <h3 class='trailer-half'>Boilerplate Template and Calcite Web</h3>
+        <p>This application template loads a web map or web scene and provides basic mapping capabilities via the ArcGIS API for JavaScript 4.x.</p>
+        <div>This application is built using:
+          <ul>
+            <li>
+              <a href="https://developers.arcgis.com/javascript/" target="_blank">Esri ArcGIS API for Javascript 4.x</a>
+            </li>
+            <li>
+              <a href="https://github.com/Esri/application-boilerplate-js" target="_blank">Esri Application Boilerplate Template</a>
+            </li>
+            <li>
+              <a href="http://esri.github.io/calcite-web/" target="_blank">Esri Calcite Web framework</a>
+            </li>
+          </ul>
+        </div>
+        <img src="./images/esri_science_of_where.png" class="left">
+        <div class="text-right">
+          <button class="btn js-modal-toggle">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIND OPTIMAL -->
+    <div class="js-modal modal-overlay" data-modal="find-optimal-dialog">
+      <div class="modal-content column-16" role="dialog" aria-labelledby="modal" role="dialog">
+        <h3 class="trailer-half icon-ui-blue icon-ui-question">About Find Optimal Analysis</h3>
+
+        <div id="find-optimal-panel" class="panel padding-trailer-quarter">
+          <div class="text-center text-red avenir-italic trailer-1">NOTE: This tool is experimental and in-development.</div>
+          <div>
+            The idea behind this task is to find ways to help identify good locations to place new Blue Lights
+          </div>
+          <ol class="list-numbered trailer-0">
+            <li>The analysis starts after the user draws an area of interest polygon (AOI) on the map</li>
+            <li>
+              First, we create evenly spaced candidate locations within the AOI
+              <ol class="list-numbered">
+                <li>Locations within existing Obstructions or Blue Lights visible areas are ignored</li>
+              </ol>
+            </li>
+            <li>
+              Next, we calculate the Blue Light visible area for every candidate location
+            </li>
+            <li>
+              Finally, for each candidate location we calculate a visibility index which is the total number of other candidate locations within its visible area
+            </li>
+          </ol>
+          <div>
+            A better measure would be to consider each candidate location in the context of existing statistics to see which one increases the most total visible area while decreasing the most overlap area. However, this only makes sense if the AOI is intersected by existing Blue Light visible areas.
+          </div>
+        </div>
+
+        <div class="right leader-half">
+          <button class="btn js-modal-toggle">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYSIS ABOUT DIALOG -->
+    <div class="js-modal modal-overlay" data-modal="analysis-about-dialog">
+      <div class="modal-content column-20" role="dialog" aria-labelledby="modal" role="dialog">
+        <!--<span class="js-modal-toggle icon-ui-close esri-interactive right" aria-label="close-modal"></span>-->
+        <h3 class="trailer-half icon-ui-blue icon-ui-question">About Blue Light Visibility Analysis</h3>
+
+        <div id="about-analysis-panel" class="panel panel-white panel-no-border">
+          <ol class="list-numbered">
+            <li>
+
+              <div class="panel">
+                <img src="./images/doc/blue_light_analysis_001.png" class="left margin-right-1">
+                <div class="text-blue font-size-1 trailer-quarter">Obstructions</div>
+                <div class="font-size-0">
+                  The analysis is performed on the selected layers that represent
+                  <span class="avenir-demi">obstructions to visibility</span>
+                  at a particular campus. Typically the layers will model such real world features as building and trees,
+                  but any Feature Layer with polygon data can be used. All of the obstruction features will be drawn
+                  with the same symbol, a dark gray fill with a darker outline.
+                </div>
+
+              </div>
+
+            </li>
+            <li>
+              <div class="panel">
+                <img src="./images/doc/blue_light_analysis_001b.png" class="left margin-right-1">
+                <div class="text-blue font-size-1 trailer-quarter">Blue Light Location</div>
+                <div class="font-size-0">
+                  The analysis starts by toggling the 'Add Blue Light' button and clicking/tapping on the map where
+                  you'd like to place a Blue Light. The location of the Blue Light will be displayed on the map with a
+                  blue and white symbol. While the 'Add Blue Light' button is toggled on, subsequent clicks/taps on the
+                  map will add more Blue Lights. You can also use an interactive drag action on the map to add a Blue
+                  Light, but analysis will be performed at a lower resolution until the drag action is finished.
+
+                  <div class="leader-half">
+                    NOTE: Map navigation will be disabled while the 'Add Blue Light' button is toggled on.
+                  </div>
+
+                  <div class="leader-half">
+                    ALSO: Each Blue Light will appear in the 'Blue Light Locations' list where you can rename or remove it.
+                    The list also allows to remove all Blue Lights and for the export of the Blue Light locations as a
+                    CSV file.
+                  </div>
+
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="panel">
+                <img src="./images/doc/blue_light_analysis_002.png" class="left margin-right-1">
+                <div class="text-blue font-size-1 trailer-quarter">Buffer & Sightlines</div>
+                <div class="font-size-0">
+                  The analysis first creates a buffer from each Blue Light location, and then creates sightlines
+                  from each Blue Light location to the edge of its buffer. In the image to the left the sightlines are
+                  displayed with an orange symbol. We use 360 locations around the edge of the buffer when performing
+                  the final analysis but only 60 locations are used in interactive drag mode. Using this buffer we
+                  then intersect it with the obstruction features to find the subset of obstruction features necessary
+                  for each Blue Light location.
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="panel">
+                <img src="./images/doc/blue_light_analysis_003.png" class="left margin-right-1">
+                <div class="text-blue font-size-1 trailer-quarter">Nearest Obstruction Intersections</div>
+                <div class="font-size-0">
+                  The analysis then iterates over each sightline and intersects it with the appropriate subset of
+                  obstruction features to come up with a list of obstruction intersection locations. In the image to
+                  the left they are displayed as small white circles. For each group of obstruction intersection
+                  locations (for each sightline) we then find the one that is closest to the Blue Light location. If
+                  there are no obstruction intersections along a sightline, we then use the edge of the sightline that
+                  intersects the buffer. In the image to the left these are displayed with a red symbol.
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="panel">
+                <img src="./images/doc/blue_light_analysis_005.png" class="left margin-right-1">
+                <div class="text-blue font-size-1 trailer-quarter">Visibility Area</div>
+                <div class="font-size-0">
+                  For each Blue Light location the analysis will create a Polygon from all of the nearest obstruction
+                  intersection locations. These visible areas are displayed with a light cyan fill. Once all visible
+                  areas are calculated, the analysis will combine them all into a single Polygon which is displayed
+                  with a white outline symbol. The total visible and overlap areas measurements are calculated and
+                  displayed above the map.
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="panel">
+                <img src="./images/doc/BlueLightsAnalysis.gif" class="left margin-right-1 last-img">
+                <div class="text-blue font-size-1 trailer-quarter">Blue Light Visibility Analysis</div>
+                <div class="font-size-0">
+                  The animation to the left shows the concepts discussed above. If you have any questions about the
+                  analysis please send us an
+                  <a href="mailto:jgrayson@esri.com;John_Nelson@esri.com;SMatthews@esri.com?subject=Blue Light Visibility Analysis">email</a>.
+                  Enjoy!
+                </div>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        <div class="right leader-half">
+          <label class="inline-block trailer-0">
+            <span>Hide on startup</span>
+            <input id="hide-about-chk" type="checkbox">
+          </label>
+          <button class="btn js-modal-toggle">OK</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- USE WEBMAP DIALOG -->
+    <div class="js-modal modal-overlay" data-modal="use-webmap-dialog">
+      <div class="modal-content column-15" role="dialog" aria-labelledby="modal" role="dialog">
+        <span class="js-modal-toggle icon-ui-close esri-interactive right" aria-label="close-modal"></span>
+        <h3 class="trailer-half icon-ui-blue icon-ui-question">How to use your Web Map</h3>
+        <div class="panel">
+          <div class="panel panel-no-border">
+            You can use your Web Map in this application to provide an initial area of interest and custom obstructions for your campus.
+          </div>
+          <ol class="list-numbered trailer-0">
+            <li>
+              <div class="font-size-1 avenir-demi">Loading your Web Map</div>
+              <div>
+                To use your Web Map in this application, append the
+                <span class="text-rule">Web Map id</span>
+                to the application url.
+                <div class="text-center text-blue font-size-0">
+                  <span class="avenir-bold">?webmap=</span>
+                  <span class="avenir-italic">YOUR WEB MAP ID HERE</span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="font-size-1 avenir-demi">Analysis Source</div>
+              You can use a
+              <span class="avenir-bold">point Feature Layer</span>
+              in your Web Map as the initial source of analysis. This application does NOT modify existing data in the Feature Layer; instead features are used as the source for the initial analysis and modifications can be saved as a new hosted Feature Layer. If point Feature Layers are available in your Web Map, you will be prompted to select one when the application starts.
+            </li>
+            <li>
+              <div class="font-size-1 avenir-demi">Obstructions to Visibility</div>
+              <div>
+                You can use
+                <span class="avenir-bold">polygon Feature Layers</span>
+                in your Web Map as obstructions to visibility. Open the 'Analysis Options' section and from the 'Obstructions' list select your obstruction layers.
+              </div>
+            </li>
+          </ol>
+        </div>
+        <div class="panel leader-half">
+          <div class="panel panel-no-border">
+            You can also use this application as a configurable template in your organization.
+          </div>
+          <ol class="list-numbered trailer-0">
+
+            <li>
+              <div class="font-size-1 avenir-demi">Host this application from your own web server</div>
+              <div>
+                Download the source code for this application from GitHub and host it on your own web server.
+                Make sure the application is running correctly before continuing.
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Add as Template</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/create-app-templates.htm#ESRI_SECTION1_4E23468F506C444CAEAF3796200F3530" target="_blank">Add the template to ArcGIS Online</a>
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Configuration File</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/configurable-templates.htm#ESRI_SECTION1_95591D1DADE147F2A6F55921584437F8" target="_blank">Associate the configuration file information with the item for your app template</a>
+                <textarea rows="6" readonly>
+                  {
+                    "configurationSettings": [
+                      {
+                        "category": "<b>Blue Lights Map</b>",
+                        "fields": [
+                          {
+                            "type": "webmap"
+                          },
+                          {
+                            "type": "string",
+                            "fieldName": "title",
+                            "label": "Application Title",
+                            "tooltip": "Application Title",
+                            "placeHolder": "the application title"
+                          }
+                        ]
+                      }
+                    ],
+                    "values": {
+                      "title": ""
+                    }
+                  }
+                </textarea>
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Register Template</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/create-app-templates.htm#ESRI_SECTION1_9F809A4A343D4245A3C72F65687CD8AD" target="_blank">Register the app template</a>
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Organization App Gallery</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/create-app-templates.htm#ESRI_SECTION1_AEC03C6B5200440A8D874FAB03ADE4BC" target="_blank">Use the template in your organization's app gallery</a>
+              </div>
+            </li>
+
+          </ol>
+        </div>
+        <div class="right leader-half">
+          <button class="btn js-modal-toggle">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIGURE AS APP TEMPLATE -->
+    <div class="js-modal modal-overlay" data-modal="configure-template-dialog">
+      <div class="modal-content column-15" role="dialog" aria-labelledby="modal" role="dialog">
+        <span class="js-modal-toggle icon-ui-close esri-interactive right" aria-label="close-modal"></span>
+        <h3 class="trailer-half icon-ui-blue icon-ui-question">Configure as Template in Organization App Gallery</h3>
+        <div class="panel leader-half">
+          <div class="panel panel-no-border">
+            You can also use this application as a configurable template in your organization.
+          </div>
+          <ol class="list-numbered trailer-0">
+
+            <li>
+              <div class="font-size-1 avenir-demi">Host this application from your own web server</div>
+              <div>
+                Download the source code for this application from GitHub and host it on your own web server.
+                Make sure the application is running correctly before continuing.
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Add as Template</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/create-app-templates.htm#ESRI_SECTION1_4E23468F506C444CAEAF3796200F3530" target="_blank">Add the template to ArcGIS Online</a>
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Configuration File</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/configurable-templates.htm#ESRI_SECTION1_95591D1DADE147F2A6F55921584437F8" target="_blank">Associate the configuration file information with the item for your app template</a>
+                <textarea rows="3" readonly>{"configurationSettings": [{"category": "<b>Blue Lights Map</b>","fields": [{"type": "webmap"},{"type": "string","fieldName": "title","label": "Application Title","tooltip": "Application Title","placeHolder": "the application title"}]}],"values": {"title": ""}}</textarea>
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Register Template</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/create-app-templates.htm#ESRI_SECTION1_9F809A4A343D4245A3C72F65687CD8AD" target="_blank">Register the app template</a>
+              </div>
+            </li>
+
+            <li>
+              <div class="font-size-1 avenir-demi">Organization App Gallery</div>
+              <div>
+                <a href="http://doc.arcgis.com/en/arcgis-online/create-maps/create-app-templates.htm#ESRI_SECTION1_AEC03C6B5200440A8D874FAB03ADE4BC" target="_blank">Use the template in your organization's app gallery</a>
+              </div>
+            </li>
+
+          </ol>
+        </div>
+        <div class="right leader-half">
+          <button class="btn js-modal-toggle">OK</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- USE POINT SOURCE -->
+    <div class="js-modal modal-overlay" data-modal="use-points-dialog">
+      <div class="modal-content column-15" role="dialog" aria-labelledby="modal" role="dialog">
+        <!--<span class="js-modal-toggle icon-ui-close esri-interactive right" aria-label="close-modal"></span>-->
+        <h3 class="trailer-half icon-ui-blue icon-ui-feature-layer">Blue Light Locations Source</h3>
+        <div class="panel">
+          <div>
+            NOTE:
+            <span class="avenir-italic">this application does NOT modify existing data in the Feature Layer. Instead, features are used as the source for the initial analysis and modifications can be saved as a new hosted Feature Layer.</span>
+          </div>
+          <div class="panel panel-white leader-half">
+            <fieldset id="points-source-list" class="fieldset-checkbox leader-half trailer-0"></fieldset>
+          </div>
+        </div>
+        <div class="leader-half">
+          <div id="point-source-load" class="left hide">
+            <span id="point-source-label" class="text-blue avenir-bold">Loading Blue Light sources...</span>
+            <progress></progress>
+          </div>
+          <div class="right">
+            <button id="point-source-btn" class="btn">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AREA OF INTEREST LAYER -->
+    <!--<div class="js-modal modal-overlay" data-modal="aoi-layer-dialog">
+      <div class="modal-content column-15" role="dialog" aria-labelledby="modal" role="dialog">
+        <h3 class="trailer-half icon-ui-blue icon-ui-feature-layer">Area of Interest</h3>
+        <div class="panel">
+          Select the layer containing the Area of Interest polygons
+          <fieldset id="aoi-layer-list" class="fieldset-checkbox leader-half trailer-0"></fieldset>
+        </div>
+        <div class="leader-half">
+          <div class="right">
+            <button id="aoi-layer-btn" class="btn">OK</button>
+          </div>
+        </div>
+      </div>
+    </div>-->
+
+    <!-- ANALYSIS OPTIONS -->
+    <div class="drawer drawer-left js-drawer" data-drawer="options-drawer" tabindex="0">
+      <nav class="drawer-nav" role="navigation">
+        <div class="panel">
+          <h4 class="icon-ui-settings2 icon-ui-blue">Analysis Options</h4>
+
+          <div class="panel panel-white padding-trailer-0 trailer-half">
+            <label>
+              <span class="avenir-demi">Blue Lights Source</span>
+              <input id="point-source-input" class="text-dark-gray avenir-italic input-error" type="text" readonly placeholder="no source point feature layers available">
+            </label>
+          </div>
+
+          <div class="panel panel-white padding-trailer-0 trailer-half">
+            <label>
+              <span class="avenir-demi">Obstructions to Visibility</span>
+              <span class="avenir-italic font-size--1 right">
+                <mark id="building-count" title="obstruction count" class="label label-blue">0</mark>
+              </span>
+              <div class="panel leader-quarter padding-trailer-half">
+                <fieldset id="obstructions-list" class="fieldset-checkbox trailer-0">
+                  <input class="hide" type="checkbox">
+                </fieldset>
+              </div>
+            </label>
+          </div>
+
+          <div class="panel panel-white padding-trailer-0 trailer-half">
+            <label>
+              <span class="avenir-demi">Area of Interest</span>
+              <div class="panel leader-quarter padding-trailer-half">
+                <label class="trailer-quarter">
+                  <span>Source</span>
+                  <select id="aoi-layer-select" class="select-full">
+                    <optgroup label="Dynamic"></optgroup>
+                    <option value="current-map-extent">[ use current map extent ]</option>
+                    <optgroup label="Static"></optgroup>
+                  </select>
+                </label>
+                <label id="aoi-location" class="trailer-quarter hide">
+                  <span>AOI Feature</span>
+                  <select id="aoi-location-select" class="select-full"></select>
+                </label>
+              </div>
+            </label>
+          </div>
+
+          <div class="panel panel-white padding-trailer-0">
+            <label class="trailer-quarter">
+              <span class="avenir-demi">Visibility Distance</span>
+              <span class="text-dark-gray avenir-italic font-size--3 right">
+                <span id="analysis-distance-label">100</span>
+                <span>meters</span>
+              </span>
+              <input id="analysis-distance-input" type="range" min="50" max="250" step="1" value="100">
+            </label>
+          </div>
+
+          <button class="btn btn-fill leader-half js-drawer-toggle">OK</button>
+        </div>
+      </nav>
+    </div>
+
+    <!-- MAP SIDE DRAWER -->
+    <div class="drawer drawer-left js-drawer" data-drawer="top-nav" tabindex="0">
+      <nav class="drawer-nav" role="navigation">
+        <div class="panel">
+          <h4 class="icon-ui-maps icon-ui-blue">Map</h4>
+          <div id="current-map-card" class="card block margin-left-quarter margin-right-quarter">
+            <figure class="card-image-wrap">
+              <img id="current-map-card-thumb" class="card-image" src="" alt="">
+              <div id="current-map-card-caption" class="card-image-caption text-right font-size--3"></div>
+            </figure>
+            <div class="card-content">
+              <h4><a id="current-map-card-title" href="" target="_blank"></a></h4>
+              <p id="current-map-card-description" class="card-last font-size--3"></p>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- PRINT SIDE DRAWER -->
+    <div class="drawer drawer-left js-drawer" data-drawer="print-drawer" tabindex="1">
+      <nav class="drawer-nav" role="navigation">
+        <div class="panel panel-white">
+          <div id="print-node"></div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- SAVE RESULT DRAWER -->
+    <div class="drawer drawer-left js-drawer" data-drawer="save-drawer" tabindex="2">
+      <nav class="drawer-nav" role="navigation">
+        <div class="panel panel-white panel-no-border">
+
+          <div class="panel trailer-half">
+            <label class="trailer-half">
+              <span class="avenir-demi">Save Blue Light Locations</span>
+            </label>
+            <button id="save-csv-btn" class="btn btn-fill icon-ui-save" title="Save Blue Light locations as a CSV file">Save as CSV</button>
+            <div id="save-csv-node" class="text-center leader-half trailer-0"></div>
+          </div>
+
+          <div class="panel trailer-half">
+            <label class="trailer-half">
+              <span class="avenir-demi">Save Blue Light Analysis Results</span>
+              <div class="panel panel-no-padding panel-no-border font-size--3 text-dark-gray">
+                Create new hosted Feature Layers of the Blue Light locations and visibility analysis results.
+              </div>
+            </label>
+
+            <label class="trailer-half">
+              <span class="text-blue">Username</span>
+              <input id="signed-in-username-node" class="input-error" type="text" readonly placeholder="not signed in">
+              <div id="signed-in-username-node-message" class="input-error-message is-active">
+                Please sign in to save the analysis results as hosted Feature Layers.
+              </div>
+            </label>
+
+            <label class="trailer-half">
+              <span class="text-blue">Layer Name</span>
+              <input id="bluelight-layer-name" class="input-search input-minimal" type="text" placeholder="layer name" value="Blue Light">
+              <div class="panel">
+                <input id="locations-layer-name" readonly class="input-success" type="text" placeholder="layer name" value="Blue Light Locations">
+                <input id="visibility-layer-name" readonly class="input-success" type="text" placeholder="layer name" value="Blue Light Visibility">
+              </div>
+              <div id="bluelight-layer-name-message" class="input-error-message ">
+                A Feature Service with one of these names already exists
+              </div>
+            </label>
+
+            <label class="trailer-half">
+              <span class="text-blue">Folder</span>
+              <div class="right tooltip tooltip-multiline tooltip-left" aria-label="Defaults to first folder with 'campus', 'blue', or 'obstructions' in the name if one is found.">
+                <span class="icon-ui-description icon-ui-blue"></span>
+              </div>
+              <select id="folder-select" class="select-full btn-disabled"></select>
+            </label>
+
+            <label class="trailer-half">
+              <span class="">Save Results</span>
+              <button id="save-results-btn" class="btn btn-fill btn-disabled leader-quarter icon-ui-feature-layer" title="Create hosted Feature Services and Feature Layer Items">Create Hosted Layers</button>
+              <div id="messages-panel" class="panel panel-white leader-quarter">
+                <pre id="messages-node" class="avenir-italic font-size--3 leader-0 trailer-quarter "></pre>
+                <div class="text-center">
+                  <progress id="messages-step" class="hide" max="10" value="0"></progress>
+                </div>
+              </div>
+            </label>
+
+            <label class="trailer-half">
+              <span class="">Hosted Layers</span>
+              <div class="panel panel-white">
+                <ul id="feature-layer-links" class="list-numbered"></ul>
+              </div>
+            </label>
+
+          </div>
+
+        </div>
+      </nav>
+    </div>
+
+    <!-- BODY WRAPPER -->
+    <div class="wrapper">
+
+      <!-- TOP NAVIGATION -->
+      <header class="top-nav">
+        <div class="grid-container">
+          <div class="column-24">
+
+            <!-- APP TITLE -->
+            <span id="app-title-node" class="top-nav-title text-blue font-size-2 margin-right-3"></span>
+
+            <!-- MAP AND CONTENT -->
+            <nav class="top-nav-list" role="navigation" aria-labelledby="topnav">
+              <!--<a class="top-nav-link esri-interactive" href="mailto:jgrayson@esri.com;John_Nelson@esri.com;SMatthews@esri.com?subject=Blue Light Visibility Analysis" title="Provide feedback or report issues...">
+                <mark class="label label-red icon-ui-contact">BETA</mark>
+              </a>-->
+              <a class="top-nav-link esri-interactive" href="https://community.esri.com/discussion/create.jspa?question=true&containerType=700&containerID=5191" target="_blank" title="Provide feedback or report issues...">
+                <mark class="label label-red icon-ui-contact">BETA</mark>
+              </a>
+              <span class="top-nav-link esri-interactive js-drawer-toggle" data-drawer="top-nav">Map</span>
+              <span class="top-nav-link esri-interactive js-drawer-toggle" data-drawer="options-drawer">
+                Analysis Options
+                <span id="no-obstructions-error" class="icon-ui-error2 icon-ui-red" title="No obstruction layers selected..."></span>
+              </span>
+            </nav>
+
+            <div class="inline-block right">
+              <!-- SIGN IN NODE -->
+              <nav id="sign-in-node" class="top-nav-list" role="navigation" aria-labelledby="usernav">
+                <span class="top-nav-link icon-ui-user esri-interactive">Sign In</span>
+              </nav>
+              <!-- USER NODE -->
+              <div id="user-node" class="dropdown js-dropdown hide">
+                <span class="top-nav-link icon-ui-user esri-interactive js-dropdown-toggle" tabindex="0" aria-haspopup="true" aria-expanded="false">
+                  <span id="user-firstname-node"></span>
+                </span>
+                <nav class="dropdown-menu dropdown-right" role="menu">
+                  <span class="dropdown-title">
+                    <img id="user-thumb-node" class="left leader-quarter margin-right-1">
+                    <div id="user-fullname-node"></div>
+                    <div id="username-node" class="font-size--3"></div>
+                  </span>
+                  <a id="sign-out-node" href="#" class="dropdown-link icon-ui-sign-out" role="menu-item">Sign Out</a>
+                </nav>
+              </div>
+            </div>
+
+            <nav id="app-details-node" class="top-nav-list margin-left-1 right" role="navigation">
+              <span id="print-action-node" class="top-nav-link icon-ui-printer icon-ui-flush js-drawer-toggle esri-interactive" title="Print Map" data-drawer="print-drawer"></span>
+              <div class="dropdown js-dropdown">
+                <button class="btn btn-transparent dropdown-btn js-dropdown-toggle top-nav-link" tabindex="0" aria-haspopup="true" aria-expanded="false">
+                  About
+                  <span class="icon-ui-down icon-ui-flush"></span>
+                </button>
+                <nav class="dropdown-menu" role="menu">
+
+                  <span class="dropdown-title">Details</span>
+                  <span id="analysis-about" class="dropdown-link icon-ui-question js-modal-toggle" data-modal="analysis-about-dialog" title="Learn about the analysis process..." role="menu-item">About Blue Light Visibility Analysis</span>
+                  <span class="dropdown-link icon-ui-question js-modal-toggle" data-modal="use-webmap-dialog" title="Learn how to use your Web Map in this application" role="menu-item">Using your Web Map</span>
+                  <span class="dropdown-link icon-ui-question js-modal-toggle" data-modal="configure-template-dialog" title="Learn how to configure this application as a template in your organization's app gallery" role="menu-item">Configure as Template in Organization App Gallery</span>
+
+                  <span class="dropdown-title">Community</span>
+                  <a class="dropdown-link icon-ui-link-external" title="Visit the 'Campus Blue Lights' community on GeoNet" href="https://community.esri.com/groups/campus-blue-lights-app-beta" target="_blank" role="menu-item">Visit our GeoNet site</a>
+                  <a class="dropdown-link icon-ui-link-external" title="Learn more about blue lights..." href="https://scholarly.cmich.edu/cgi-bin/cmuscholarly?a=d&d=CMUGR2014-53.1.28&e=-------en-10--1--txt-txIN%7ctxAUF%7ctxTI--------" target="_blank" role="menu-item">Blue Lights</a>
+
+                  <span class="dropdown-title">App</span>
+                  <span class="dropdown-link icon-ui-description js-modal-toggle" data-modal="app-details-dialog" title="About this app..." role="menu-item">About this app...</span>
+                </nav>
+              </div>
+            </nav>
+
+          </div>
+        </div>
+      </header>
+
+      <!-- REST OF BODY -->
+      <div class="grid-container leader-half trailer-half">
+
+        <div id="left-pane" class="column-6 padding-right-quarter ui-layout ui-layout-left">
+
+          <div class="panel panel-dark-blue trailer-half">
+            <label class="font-size-1 trailer-quarter">About Campus Blue Lights</label>
+            <p class="font-size--3 trailer-quarter">
+              Where should we position Blue Lights (emergency call boxes with blue lights) sprinkled around campus?
+              How can we accommodate our visitors while doing our best to ensure their safety?
+              Where do we currently have troublesome areas?
+              Where should security patrols be located? </p>
+            <button id="add-blue-light-btn" class="btn btn-white btn-disabled icon-ui-green text-blue right" title="Use this tool to add or modify a blue light location on the map...">Add or Modify Blue Lights</button>
+          </div>
+
+          <!--<aside class="js-accordion accordion">
+            <div class="accordion-section">
+              <h4 class="accordion-title">
+                <span class="accordion-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 32 32" class="svg-icon"><path d="M28 9v5L16 26 4 14V9l12 12L28 9z"/></svg>
+                </span>
+                <span class="text-blue">
+                  Analysis Options
+
+                </span>
+
+              </h4>
+              <div class="accordion-content panel panel-white panel-no-border">
+
+
+              </div>
+            </div>
+          </aside>-->
+
+          <aside class="side-nav leader-half" aria-role="complementary">
+            <div class="side-nav-title text-blue">
+              <span>Blue Light Locations</span>
+              <mark id="blue-light-count" class="label label-blue right">0</mark>
+            </div>
+            <nav id="locations-list" role="navigation" aria-labelledby="sidenav"></nav>
+          </aside>
+
+          <div id="blue-lights-actions" class="right leader-quarter">
+            <button id="save-analysis-btn" class="btn btn-small btn-clear js-drawer-toggle hide" title="Save Analysis Results" data-drawer="save-drawer">save</button>
+            <button id="clear-analysis-btn" class="btn btn-small btn-red btn-clear hide" title="Remove all Blue Light locations">clear</button>
+          </div>
+
+        </div>
+
+        <div id="center-pane" class="column-18 padding-left-quarter">
+
+          <div class="panel panel-white panel-no-padding panel-no-border trailer-half">
+
+            <div class="block-group block-group-3-up">
+              <div class="block">
+                <div class="panel text-center padding-leader-half padding-trailer-half">
+                  <div>
+                    <span class="tooltip tooltip-multiline" aria-label="Total area of the union of all individual Blue Light visible areas; in the map this area is delineated with a cyan outline.">
+                      <span class="icon-ui-description icon-ui-flush icon-ui-blue"></span>
+                    </span>
+                    <span class="avenir-demi font-size-1">Visible Area</span>
+                  </div>
+                  <div class="leader-quarter">
+                    <span id="all-area" class="text-blue avenir-bold">0</span>
+                    <span>square feet</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <div class="panel text-center padding-leader-half padding-trailer-half">
+                  <div>
+                    <span class="tooltip tooltip-multiline" aria-label="'Visible Area' subtracted from the sum of all individual Blue Light visible areas. The idea is to maximize the 'Visible Area' while minimizing the 'Overlap Area'.">
+                      <span class="icon-ui-description icon-ui-flush icon-ui-blue"></span>
+                    </span>
+                    <span class="avenir-demi font-size-1">Overlap Area</span>
+                  </div>
+                  <div class="leader-quarter">
+                    <span id="overlap-area" class="text-blue avenir-bold">0</span>
+                    <span>square feet</span>
+                    <mark id="overlap-area-percent" class="label label-blue font-size-0 margin-left-1">0.0 %</mark>
+                  </div>
+                </div>
+              </div>
+
+              <div class="block">
+                <div class="panel text-center padding-leader-half padding-trailer-half">
+                  <div>
+                    <span class="tooltip tooltip-multiline" aria-label="The current 'Area of Interest' divided by the 'Visible Area'. TODO: subtract total area of obstructions within 'Area of Interest'...">
+                      <span class="icon-ui-description icon-ui-flush icon-ui-blue"></span>
+                    </span>
+                    <span class="avenir-demi font-size-1">Coverage</span>
+                  </div>
+                  <div class="leader-quarter">
+                    <span id="aoi-area" class="text-blue avenir-bold">0</span>
+                    <span>square feet</span>
+                    <mark id="coverage-area-percent" class="label label-blue font-size-0 margin-left-1">0.0 %</mark>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div id="view-node">
+            <div id="webmap-node" class="maximized"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div id="notifications-node"></div>
+
+  </body>
+</html>

@@ -1,0 +1,172 @@
+html {
+  height                   : 100%;
+  font-size                : 100%;
+  -webkit-text-size-adjust : 100%;
+  -moz-text-size-adjust    : 100%;
+  -ms-text-size-adjust     : 100%;
+}
+
+body {
+  min-height : 100%;
+  margin     : 0;
+}
+
+body * {
+  outline : none;
+}
+
+.drawer-nav {
+  width : 400px;
+}
+
+#view-node {
+  height           : calc(100vh - 200px) !important;
+  margin           : 0;
+  padding          : 0;
+  background-color : #242424;
+  box-shadow       : 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.loader .loader-text {
+  padding-top : 2.5rem;
+}
+
+#webmap-node {
+  width            : 200px;
+  height           : 200px;
+  background-color : #fff;
+  box-shadow       : 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.daynight-node > input[type="range"] {
+  width : 80px;
+}
+
+.daynight-node > input[type="range"]::-ms-fill-lower,
+.daynight-node > input[type="range"]::-ms-fill-upper {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,000000+100 */
+  background : rgb(239, 239, 239) !important; /* Old browsers */
+  background : -moz-linear-gradient(left, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* FF3.6-15 */
+  background : -webkit-linear-gradient(left, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* Chrome10-25,Safari5.1-6 */
+  background : linear-gradient(to right, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter     : progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#000000', GradientType=1) !important; /* IE6-9 */
+}
+
+.daynight-node > input[type="range"]::-moz-range-track {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,000000+100 */
+  background : rgb(239, 239, 239) !important; /* Old browsers */
+  background : -moz-linear-gradient(left, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* FF3.6-15 */
+  background : -webkit-linear-gradient(left, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* Chrome10-25,Safari5.1-6 */
+  background : linear-gradient(to right, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter     : progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#000000', GradientType=1) !important; /* IE6-9 */
+}
+
+.daynight-node > input[type="range"]::-webkit-slider-runnable-track {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,000000+100 */
+  background : rgb(239, 239, 239) !important; /* Old browsers */
+  background : -moz-linear-gradient(left, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* FF3.6-15 */
+  background : -webkit-linear-gradient(left, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* Chrome10-25,Safari5.1-6 */
+  background : linear-gradient(to right, rgb(239, 239, 239) 0%, rgba(0, 0, 0, 1) 100%) !important; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter     : progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#000000', GradientType=1) !important; /* IE6-9 */
+}
+
+#user-thumb-node {
+  height        : 44px;
+  border-radius : 22px;
+}
+
+.esri-print__container {
+  max-height : unset;
+}
+
+#locations-list:empty {
+  padding    : 10px;
+  font-size  : smaller;
+  text-align : center;
+  font-style : italic;
+  color      : #ccc;
+}
+
+#locations-list:empty:after {
+  content : "No blue lights added yet...";
+}
+
+#results-settings-node.use-service {
+  color            : #fff;
+  background-color : cyan;
+}
+
+#about-analysis-panel {
+  max-height   : 50vh;
+  overflow : auto;
+}
+
+#about-analysis-panel img {
+  height : 325px;
+}
+
+#about-analysis-panel .last-img {
+  height : unset;
+}
+
+#locations-list {
+  max-height : calc(100vh - 500px);
+  overflow   : auto;
+}
+
+.item-node {
+  transition : all 1s linear;
+}
+
+.item-node.updating {
+  transition       : all 1s linear;
+  background-color : palegoldenrod;
+}
+
+.item-actions {
+  display : none;
+}
+
+.item-node:hover .item-actions {
+  display : inline-block;
+}
+
+/*.basemap-panel {
+  padding          : 2px;
+  background-color : #fff;
+}
+
+.toggle-basemap {
+  margin : 1px 2px;
+}
+
+.toggle-basemap:hover {
+  color            : #fff;
+  background-color : #004575;
+}
+
+.toggle-basemap-evening {
+  color            : #fff;
+  background-color : #666;
+}
+
+.toggle-basemap-night {
+  color            : #fff;
+  background-color : #242424;
+}*/
+
+.panel-toggle {
+  z-index    : 99;
+  position   : absolute;
+  cursor     : pointer;
+  left       : 0;
+  top        : calc(50% - 15px);
+  padding    : 4px 0;
+  color      : #666;
+  background : #fff;
+  box-shadow : 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.panel-toggle:hover {
+  color : #0079c1;
+}
