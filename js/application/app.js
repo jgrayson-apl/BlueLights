@@ -90,6 +90,12 @@ define([
       FINEST: 720
     },
 
+    DEFAULT_BLUE_LIGHT_GRADIENT: [
+      { "offset": "0%", "stop-color": "white", "stop-opacity": "1.00" },
+      { "offset": "15%", "stop-color": "cyan", "stop-opacity": "0.85" },
+      { "offset": "100%", "stop-color": "rgb(64,0,255)", "stop-opacity": "0.00" }
+    ],
+
     /**
      *
      */
@@ -510,11 +516,7 @@ define([
         analysisView.map.addMany([obstructionsLayer, visibilityLayer, locationsLayer]);
 
         // BLUE LIGHTS GRADIENT //
-        const blueLightGradient = this.config.blueLightGradient || [
-          { "offset": "0%", "stop-color": "white", "stop-opacity": "1.00" },
-          { "offset": "15%", "stop-color": "cyan", "stop-opacity": "0.85" },
-          { "offset": "100%", "stop-color": "rgb(64,0,255)", "stop-opacity": "0.00" }
-        ];
+        const blueLightGradient = this.config.blueLightGradient || this.DEFAULT_BLUE_LIGHT_GRADIENT;
         this.applyGradientFill(analysisView, visibilityLayer, blueLightGradient);
 
         // ANALYSIS VIEW TOOLS //
