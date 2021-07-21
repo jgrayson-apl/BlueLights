@@ -28,6 +28,6 @@
 
 ## Blue Light Visibility Analysis
 > This animation shows the concepts discussed above. If you have any questions about the analysis please send us an email.
-![](./images/doc/blue_light_analysis_004.png)
+![](./images/doc/BlueLightsAnalysis.gif)
 
 Enjoy!
