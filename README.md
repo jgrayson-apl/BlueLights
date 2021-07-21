@@ -1,6 +1,14 @@
 
 # Blue Light Visibility Analysis
 
+Where should we position Blue Lights (emergency call boxes with blue lights) sprinkled around campus?
+
+* How can we accommodate our visitors while doing our best to ensure their safety?
+* Where do we currently have troublesome areas?
+* Where should security patrols be located?
+
+### Let's take a closer look at the geometry based analysis...
+
 ## Obstructions
 > The analysis is performed on the selected layers that represent obstructions to visibility at a particular campus. Typically the layers will model such real world features as building and trees, but any Feature Layer with polygon data can be used. All of the obstruction features will be drawn with the same symbol, a dark gray fill with a darker outline.
 ![](./images/doc/blue_light_analysis_001.png)
