@@ -7,6 +7,8 @@ Where should we position Blue Lights (emergency call boxes with blue lights) spr
 * Where do we currently have troublesome areas?
 * Where should security patrols be located?
 
+> [You can try out the demo web app here...](https://apl.esri.com/jg/BlueLights/index.html)
+
 ### Let's take a closer look at the geometry based analysis...
 
 ## Obstructions
