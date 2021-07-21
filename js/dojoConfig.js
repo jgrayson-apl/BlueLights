@@ -7,7 +7,7 @@ dojoConfig = {
     { name: "application", location: package_path + "/js/application", main: "app" },
     { name: "boilerplate", location: package_path + "/js/boilerplate", main: "Boilerplate" },
     { name: "config", location: package_path + "/config" },
-    { name: "calcite", location: "//s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.0.0-rc.8/js", main: "calcite-web.min" }
+    { name: "calcite", location: "//s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/js", main: "calcite-web.min" }
   ]
 };
 if(location.search.match(/locale=([\w-]+)/)) {

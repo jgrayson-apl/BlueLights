@@ -131,8 +131,7 @@ define([
         } else {
           this.reportError(new Error("app:: Could not load an item to display"));
         }
-      }
-      else {
+      } else {
         this.reportError(new Error("app:: Boilerplate is not defined"));
       }
     },
@@ -290,7 +289,7 @@ define([
       };
 
 
-      // CALCITE CLICK EVENT //
+      // CLICK EVENT //
       on(signInNode, "click", userSignIn);
       on(signOutNode, "click", userSignOut);
 
@@ -536,7 +535,7 @@ define([
           }
         };
         const setAboutDialogOptions = (aboutDialogOptions) => {
-          cookie("aboutDialog", JSON.stringify(aboutDialogOptions), { expires: (new Date(Date.UTC(2020, 0, 0))).toUTCString() });
+          cookie("aboutDialog", JSON.stringify(aboutDialogOptions), { expires: (new Date(Date.UTC(2100, 0, 0))).toUTCString() });
         };
 
         // GET ABOUT DIALOG OPTIONS //
@@ -1379,7 +1378,7 @@ define([
             }, "points-source-list"));
           });
 
-          calcite.bus.emit("modal:open", "use-points-dialog");
+          calcite.bus.emit("modal:open", { id: "use-points-dialog" });
           on.once(dom.byId("point-source-btn"), "click", () => {
             domClass.add("point-source-btn", "btn-disabled");
 
@@ -1410,12 +1409,12 @@ define([
                 });
 
                 domClass.add("point-source-load", "hide");
-                calcite.bus.emit("modal:close", "use-points-dialog");
+                calcite.bus.emit("modal:close", { id: "use-points-dialog" });
                 deferred.resolve();
               });
             } else {
               dom.byId("point-source-input").placeholder = "no point feature layer selected on startup";
-              calcite.bus.emit("modal:close", "use-points-dialog");
+              calcite.bus.emit("modal:close", { id: "use-points-dialog" });
               deferred.resolve();
             }
           });
